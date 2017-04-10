@@ -16,6 +16,7 @@ class TranslateTest extends TestCase
 
     private $root;
 
+
     public function setUp()
     {
         parent::setUp();
