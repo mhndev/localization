@@ -2,7 +2,6 @@
 namespace mhndev\localization;
 
 use mhndev\localization\interfaces\iLanguage;
-use mhndev\localization\interfaces\iSource;
 
 /**
  * Class LanguagePersian
@@ -14,21 +13,6 @@ class LanguagePersian extends aLanguage implements iLanguage
     const name = 'persian';
     const code = 'fa';
 
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $code;
-
-    /**
-     * @var iSource
-     */
-    protected $source;
 
     /**
      * LanguageEnglish constructor.
@@ -43,31 +27,5 @@ class LanguagePersian extends aLanguage implements iLanguage
         $this->source = $source;
     }
 
-
-    /**
-     * for example fa | en | de | fr
-     * @return string
-     */
-    function getUrlCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * for example persian | english | dutch
-     * @return string
-     */
-    function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return iSource
-     */
-    function getSource()
-    {
-        return $this->source;
-    }
 
 }

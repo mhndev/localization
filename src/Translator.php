@@ -1,6 +1,8 @@
 <?php
 namespace mhndev\localization;
 
+use function foo\func;
+use mhndev\localization\filters\FilterFactory;
 use mhndev\localization\interfaces\iLanguage;
 use mhndev\localization\interfaces\iSource;
 use mhndev\localization\interfaces\iTranslator;
@@ -46,6 +48,41 @@ class Translator implements iTranslator
 
         return $this->getLanguage($to)->getSource()->get($string, $params);
     }
+
+
+    /**
+     * @param string $text
+     * @param null $to
+     * @return mixed
+     */
+    function localizeText($text, $to = null)
+    {
+        $pattern = '/{{(.*?)}}/';
+
+        $callback = function ($matches) use ($to) {
+
+            $str = $matches[1];
+
+            if(! strpos($str, '|')){
+                $result = $this->translate($str, $to);
+            }
+
+            else{
+                $items = explode('|', $str);
+                $str = $items[0];
+                $filterName = trim($items[1]);
+
+                $result = FilterFactory::newInstance($filterName)->translate($str);
+            }
+
+            return $result;
+        };
+
+        $result = preg_replace_callback($pattern, $callback, $text);
+
+        return $result;
+    }
+
 
 
 
