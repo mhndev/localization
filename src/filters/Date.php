@@ -32,22 +32,20 @@ class Date implements iFilter
      * @param string $format
      *
      * @param null $timezone
-     * @param string $calender
      * @return string
      */
     public function translate(
         $string,
         $locale = 'en_US',
         $format = 'E dd LLL yyyy  - H:m',
-        $timezone = null,
-        $calender = 'gregorian'
+        $timezone = null
     )
     {
         if(is_null($timezone)){
             $timezone = date_default_timezone_get();
         }
 
-        $date = new IntlDateTime($string, $timezone, $calender, $locale);
+        $date = new IntlDateTime($string, $timezone, locale_to_calender($locale), $locale);
 
         return $date->format($format);
     }

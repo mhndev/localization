@@ -13,8 +13,6 @@
 
 ```php
 
-include_once 'vendor/autoload.php';
-
 $source = new \mhndev\localization\SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'en.php');
 $lang_en = (new \mhndev\localization\LanguageEnglish())->setSource($source);
 
@@ -38,7 +36,20 @@ $result = $translator->translate('greet', 'fa',
 
 
 echo '<div style="direction: rtl; text-align: right">'.$result.'</div>';
-die();
 
+
+date_default_timezone_set('Asia/Tehran');
+$now = time();
+
+$yesterday = $now - 3600 * 24;
+
+
+$string = 'today is {{'.$now.'|date }} and yesterday was :{{'.$yesterday.'| date}}';
+
+$translation = $translator->localizeText($string, 'fa');
+
+echo '<br>';
+
+echo $translation;
 
 ```

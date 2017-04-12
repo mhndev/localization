@@ -1,7 +1,6 @@
 <?php
 namespace mhndev\localization;
 
-use function foo\func;
 use mhndev\localization\filters\FilterFactory;
 use mhndev\localization\interfaces\iLanguage;
 use mhndev\localization\interfaces\iSource;
@@ -53,7 +52,7 @@ class Translator implements iTranslator
     /**
      * @param string $text
      * @param null $to
-     * @return mixed
+     * @return string
      */
     function localizeText($text, $to = null)
     {
@@ -72,15 +71,14 @@ class Translator implements iTranslator
                 $str = $items[0];
                 $filterName = trim($items[1]);
 
-                $result = FilterFactory::newInstance($filterName)->translate($str);
+                $result = FilterFactory::newInstance($filterName)
+                    ->translate($str, language_code_to_locale($to));
             }
 
             return $result;
         };
 
-        $result = preg_replace_callback($pattern, $callback, $text);
-
-        return $result;
+        return preg_replace_callback($pattern, $callback, $text);
     }
 
 
