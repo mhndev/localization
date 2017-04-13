@@ -60,7 +60,8 @@ $string = 'today is {{'.$now.'|date }} and yesterday was :{{'.$yesterday.'| date
 
 /*
  * output would be :
- *
+ *  
+ *  today is پنجشنبه ۲۴ فروردین ۱۳۹۶ - ۱۰:۵۶ and yesterday was :چهارشنبه ۲۳ فروردین ۱۳۹۶ - ۱۰:۵۶
  *
  */
 
