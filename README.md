@@ -1,7 +1,6 @@
 [![Build Status](https://travis-ci.org/mhndev/localization.svg?branch=master)](https://travis-ci.org/mhndev/localization)
-[![Latest Stable Version](https://poser.pugx.org/mhndev/localization/v/stable)](https://packagist.org/packages/mhndev/localization)[![Total Downloads](https://poser.pugx.org/mhndev/php-std/downloads)](https://packagist.org/packages/mhndev/php-std)
-[![Latest Unstable Version](https://poser.pugx.org/mhndev/localization/v/unstable)](https://packagist.org/packages/mhndev/localization)[![License](https://poser.pugx.org/mhndev/php-std/license)](https://packagist.org/packages/mhndev/php-std)
-[![composer.lock](https://poser.pugx.org/mhndev/localization/composerlock)](https://packagist.org/packages/mhndev/localization)
+[![Latest Stable Version](https://poser.pugx.org/mhndev/localization/v/stable)](https://packagist.org/packages/mhndev/localization)
+[![Latest Unstable Version](https://poser.pugx.org/mhndev/localization/v/unstable)](https://packagist.org/packages/mhndev/localization)
 [![License](https://poser.pugx.org/mhndev/localization/license)](https://packagist.org/packages/mhndev/localization)
 # Localization i18n
 
