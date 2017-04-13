@@ -10,6 +10,12 @@
 #### sample code
 
 ```php
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+include_once 'vendor/autoload.php';
 
 $source = new \mhndev\localization\SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'en.php');
 $lang_en = (new \mhndev\localization\LanguageEnglish())->setSource($source);
@@ -32,6 +38,14 @@ $result = $translator->translate('greet', 'fa',
     ']
 );
 
+/*
+ * output would be :
+ *
+ * today is پنجشنبه ۲۴ فروردین ۱۳۹۶  - ۱۰:۵۶ and yesterday was :چهارشنبه ۲۳ فروردین ۱۳۹۶  - ۱۰:۵۶
+ *
+ * سلام من مجید هستم . من یک برنامه نویس هستم و در شرکت دیجی پیک کار میکنم
+ */
+
 
 echo '<div style="direction: rtl; text-align: right">'.$result.'</div>';
 
@@ -44,10 +58,28 @@ $yesterday = $now - 3600 * 24;
 
 $string = 'today is {{'.$now.'|date }} and yesterday was :{{'.$yesterday.'| date}}';
 
+/*
+ * output would be :
+ *
+ *
+ */
+
+
 $translation = $translator->localizeText($string, 'fa');
 
 echo '<br>';
 
 echo $translation;
+
+
+//http response object which implement stream
+//localize http response stream
+
+//$string = (string)$response->getBody();
+//$newBody = new Body(fopen('php://memory', 'r+'));
+//$newBody->write(self::localizeText($string));
+//
+//$newResponse = $response->withBody($newBody);
+
 
 ```
