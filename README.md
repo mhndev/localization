@@ -41,7 +41,6 @@ $result = $translator->translate('greet', 'fa',
 /*
  * output would be :
  *
- * today is پنجشنبه ۲۴ فروردین ۱۳۹۶  - ۱۰:۵۶ and yesterday was :چهارشنبه ۲۳ فروردین ۱۳۹۶  - ۱۰:۵۶
  *
  * سلام من مجید هستم . من یک برنامه نویس هستم و در شرکت دیجی پیک کار میکنم
  */
