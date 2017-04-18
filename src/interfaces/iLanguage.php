@@ -15,6 +15,12 @@ interface iLanguage
     function getUrlCode();
 
     /**
+     * for example IR | US | FR
+     * @return string
+     */
+    function getCountryCode();
+
+    /**
      * for example persian | english | dutch
      * @return string
      */
@@ -25,4 +31,23 @@ interface iLanguage
      * @return iSource
      */
     function getSource();
+
+
+    /**
+     * @param iSource $source
+     * @return $this
+     */
+    function setSource(iSource $source);
+
+
+    /**
+     * @return string
+     */
+    function getLocale();
+
+
+    /**
+     * @return mixed
+     */
+    function getCalendar();
 }

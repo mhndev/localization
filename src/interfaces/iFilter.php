@@ -15,7 +15,8 @@ interface iFilter
 
     /**
      * @param $string
+     * @param array $options
      * @return string
      */
-    function translate($string);
+    function translate($string, array $options = []);
 }

@@ -2,6 +2,7 @@
 namespace mhndev\localization\filters;
 
 use mhndev\localization\interfaces\iFilter;
+use mhndev\localization\LanguageFactory;
 use mhndev\localization\libs\IntlDateTime;
 
 /**
@@ -28,26 +29,31 @@ class Date implements iFilter
 
     /**
      * @param string $string
-     * @param string $locale
-     * @param string $format
-     *
-     * @param null $timezone
+     * @param array $options
      * @return string
      */
-    public function translate(
-        $string,
-        $locale = 'en_US',
-        $format = 'E dd LLL yyyy  - H:m',
-        $timezone = null
-    )
+    public function translate($string, array $options = [])
     {
-        if(is_null($timezone)){
-            $timezone = date_default_timezone_get();
+        if(empty($options['language'])) {
+            $options['language'] = LanguageFactory::fromUrlCode('en');
         }
 
-        $date = new IntlDateTime($string, $timezone, locale_to_calender($locale), $locale);
+        if(empty($options['format'])) {
+            $options['format'] = 'E dd LLL yyyy  - H:m';
+        }
 
-        return $date->format($format);
+        if(empty($options['timezone'] )) {
+            $options['timezone'] = date_default_timezone_get();
+        }
+
+        $date = new IntlDateTime(
+            $string,
+            $options['timezone'],
+            $options['language']->getCalendar(),
+            $options['language']->getLocale()
+        );
+
+        return $date->format($options['format']);
     }
 
     /**

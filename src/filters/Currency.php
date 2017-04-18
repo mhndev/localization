@@ -1,7 +1,9 @@
 <?php
 namespace mhndev\localization\filters;
 
+use mhndev\localization\exceptions\InvalidArgumentException;
 use mhndev\localization\interfaces\iFilter;
+use mhndev\localization\interfaces\iLanguage;
 
 /**
  * Class Currency
@@ -26,15 +28,25 @@ class Currency implements iFilter
 
     /**
      * @param $string
-     * @param string $locale
-     * @param string $format
+     * @param array $options
      * @return string
      */
-    public function translate($string, $locale = 'en_US', $format = '%i')
+    public function translate($string, array $options = [])
     {
-        setlocale(LC_MONETARY, $locale);
+        /** @var iLanguage $lang */
+        if(empty($lang = $options['language']) ){
+            throw new InvalidArgumentException(sprintf(
+                'language option is needed'
+            ));
+        }
 
-        return money_format($format, $string);
+        if(empty($options['format'])){
+            $options['format'] = '%i';
+        }
+
+        setlocale(LC_MONETARY, $lang->getLocale() );
+
+        return money_format($options['format'], $string);
     }
 
     /**

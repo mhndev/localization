@@ -32,14 +32,18 @@ class Number implements iFilter
 
     /**
      * @param string $string
-     * @param string $format
+     * @param array $options
      * @return string
      */
-    function translate($string, $format = self::ENGLISH)
+    function translate($string, array $options = [])
     {
+        if(empty($options['format'])){
+            $options['format'] = self::ENGLISH;
+        }
+
         $result = '';
 
-        switch ($format){
+        switch ($options['format']){
             case self::ENGLISH:
                 $result = number_format($string);
                 break;

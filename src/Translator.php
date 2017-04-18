@@ -71,8 +71,11 @@ class Translator implements iTranslator
                 $str = $items[0];
                 $filterName = trim($items[1]);
 
-                $result = FilterFactory::newInstance($filterName)
-                    ->translate($str, language_code_to_locale($to));
+                $result = FilterFactory::newInstance($filterName)->translate(
+                        $str,
+                        ['language'=>LanguageFactory::fromUrlCode($to) ]
+                );
+
             }
 
             return $result;
@@ -123,7 +126,7 @@ class Translator implements iTranslator
      */
     function getFallbackLanguage()
     {
-        return new LanguageEnglish();
+        return LanguageFactory::fromUrlCode('en');
     }
 
 

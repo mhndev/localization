@@ -10,20 +10,24 @@
 #### sample code
 
 ```php
-<?php
+use mhndev\localization\LanguageFactory;
+use mhndev\localization\LanguageLoader;
+use mhndev\localization\SourcePhpArray;
+use mhndev\localization\Translator;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 include_once 'vendor/autoload.php';
 
-$source = new \mhndev\localization\SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'en.php');
-$lang_en = (new \mhndev\localization\LanguageEnglish())->setSource($source);
+$source = new SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'en.php');
+$lang_en = LanguageFactory::fromCountryCode('us')->setSource($source);
+$source = new SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'fa.php');
+$lang_fa = LanguageFactory::fromUrlCode('fa')->setSource($source);
 
-$source = new \mhndev\localization\SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'fa.php');
-$lang_fa = (new \mhndev\localization\LanguagePersian())->setSource($source);
-
-$translator = new \mhndev\localization\Translator();
+$translator = new Translator();
 
 $translator->addLanguage($lang_en);
 $translator->addLanguage($lang_fa);
@@ -41,6 +45,7 @@ $result = $translator->translate('greet', 'fa',
 /*
  * output would be :
  *
+ * today is پنجشنبه ۲۴ فروردین ۱۳۹۶  - ۱۰:۵۶ and yesterday was :چهارشنبه ۲۳ فروردین ۱۳۹۶  - ۱۰:۵۶
  *
  * سلام من مجید هستم . من یک برنامه نویس هستم و در شرکت دیجی پیک کار میکنم
  */
@@ -59,9 +64,8 @@ $string = 'today is {{'.$now.'|date }} and yesterday was :{{'.$yesterday.'| date
 
 /*
  * output would be :
- *  
- *  today is پنجشنبه ۲۴ فروردین ۱۳۹۶ - ۱۰:۵۶ and yesterday was :چهارشنبه ۲۳ فروردین ۱۳۹۶ - ۱۰:۵۶
  *
+ * today is پنجشنبه ۲۴ فروردین ۱۳۹۶ - ۱۰:۵۶ and yesterday was :چهارشنبه ۲۳ فروردین ۱۳۹۶ - ۱۰:۵۶
  */
 
 
@@ -72,14 +76,22 @@ echo '<br>';
 echo $translation;
 
 
-//http response object which implement stream
-//localize http response stream
+$lngLoader = new LanguageLoader();
 
-//$string = (string)$response->getBody();
-//$newBody = new Body(fopen('php://memory', 'r+'));
-//$newBody->write(self::localizeText($string));
-//
-//$newResponse = $response->withBody($newBody);
+$language = LanguageFactory::fromUrlCode('en');
 
+$languageDetector = new \mhndev\localization\LanguageDetector();
+$languageDetector->registerStrategy(new \mhndev\localization\strategies\StrategyUriChunk());
+$languageDetector->registerStrategy(new \mhndev\localization\strategies\StrategyQueryParameter());
+$languageDetector->registerStrategy(new \mhndev\localization\strategies\StrategyAcceptLngHeader());
+
+$request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals()->withUri(new \GuzzleHttp\Psr7\Uri(
+    'http://example.com/fa/some/random/address?key=value'
+));
+
+$result = $languageDetector->detect($request);
+
+var_dump($result);
+die();
 
 ```
