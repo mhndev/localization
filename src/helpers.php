@@ -1,16 +1,15 @@
 <?php
-use mhndev\localization\interfaces\iLanguage;
 
-/**
- * @param $string
- * @param iLanguage | null $to
- * @param array $parameters
- * @return string
- */
-function _t($string, iLanguage $to = null, array $parameters = [])
-{
-    (new \mhndev\localization\Translator())->translate($string, $to, $parameters);
-}
+///**
+// * @param $string
+// * @param iLanguage | null $to
+// * @param array $parameters
+// * @return string
+// */
+//function _t($string, iLanguage $to = null, array $parameters = [])
+//{
+//    (new \mhndev\localization\Translator())->translate($string, $to, $parameters);
+//}
 
 
 /**

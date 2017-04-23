@@ -1,7 +1,9 @@
 <?php
 namespace mhndev\localization;
 
+use mhndev\localization\exceptions\LanguageNotFoundException;
 use mhndev\localization\exceptions\ParameterNotFoundException;
+use mhndev\localization\exceptions\RepositoryNotFoundException;
 use mhndev\localization\filters\FilterFactory;
 use mhndev\localization\interfaces\iLanguage;
 use mhndev\localization\interfaces\iTranslator;
@@ -30,6 +32,8 @@ class Translator implements iTranslator
      * @param null | iLanguage $to
      * @param array $params
      * @return string
+     * @throws LanguageNotFoundException
+     * @throws RepositoryNotFoundException
      */
     function translate($string, iLanguage $to = null, array $params = [])
     {
@@ -39,7 +43,23 @@ class Translator implements iTranslator
 
         $language = $this->getLanguage($to->getName());
 
-        $stringToBeTranslated = $language->getRepository()->get($string, $to, $params);
+        if(empty($language)){
+            throw new LanguageNotFoundException(sprintf(
+                'language %s not found in registered languages',
+                $to->getName()
+            ));
+        }
+
+        $repository = $language->getRepository();
+
+        if(empty($repository)){
+            throw new RepositoryNotFoundException(sprintf(
+               'repository not found for %s language',
+                $language->getName()
+            ));
+        }
+
+        $stringToBeTranslated = $repository->get($string, $to, $params);
 
         return $this->translateString($stringToBeTranslated, $params);
     }
