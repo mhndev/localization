@@ -1,15 +1,16 @@
 <?php
-namespace mhndev\localization;
+namespace mhndev\localization\repositories;
 
 use mhndev\localization\exceptions\PathNotFoundException;
 use mhndev\localization\exceptions\TranslationNotFoundException;
-use mhndev\localization\interfaces\iSource;
+use mhndev\localization\interfaces\iLanguage;
+use mhndev\localization\interfaces\iLanguageRepository;
 
 /**
  * Class SourcePhpArray
  * @package mhndev\localization
  */
-class SourcePhpArray implements iSource
+class PhpArray implements iLanguageRepository
 {
 
     /**
@@ -43,26 +44,21 @@ class SourcePhpArray implements iSource
 
     /**
      * @param $key
+     * @param iLanguage $to
      * @param array $params
      * @return string
      */
-    function get($key, array $params = [])
+    function get($key, iLanguage $to, array $params = [])
     {
         if(!array_key_exists($key, $this->values)){
             throw new TranslationNotFoundException(sprintf(
-                'translation for %s not found in path : %s', $key, $this->path
+                'translation for %s not found in path : %s',
+                $key,
+                $this->path
             ));
         }
 
-        $rawValue = $this->values[$key];
-
-        if(!empty($params)){
-            $result = _t($rawValue, $params);
-
-        }else{
-            $result = $rawValue;
-        }
-
-        return $result;
+        return $this->values[$key];
     }
+
 }

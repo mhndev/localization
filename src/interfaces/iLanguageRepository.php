@@ -2,16 +2,17 @@
 namespace mhndev\localization\interfaces;
 
 /**
- * Interface iSource
+ * Interface iLanguageRepository
  * @package mhndev\localization\interfaces
  */
-interface iSource
+interface iLanguageRepository
 {
 
     /**
      * @param $key
+     * @param iLanguage $to
      * @param array $params
      * @return mixed
      */
-    function get($key, array $params = []);
+    function get($key, iLanguage $to, array $params = []);
 }

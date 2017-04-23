@@ -10,11 +10,11 @@ interface iTranslator
 
     /**
      * @param $string
-     * @param null $to
+     * @param null | iLanguage $to
      * @param array $params
      * @return string
      */
-    function translate($string, $to = null, array $params = []);
+    function translate($string, iLanguage $to = null, array $params = []);
 
 
     /**
@@ -29,4 +29,12 @@ interface iTranslator
      */
     function getFallbackLanguage();
 
+
+    /**
+     * @param string $text
+     * @param null | iLanguage $to
+     * @param array $params
+     * @return string
+     */
+    function localizeText($text, iLanguage $to = null, array $params = []);
 }

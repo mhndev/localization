@@ -2,7 +2,7 @@
 namespace mhndev\localization;
 
 use mhndev\localization\interfaces\iLanguage;
-use mhndev\localization\interfaces\iSource;
+use mhndev\localization\interfaces\iLanguageRepository;
 
 /**
  * Class aLanguage
@@ -12,9 +12,9 @@ class Language implements iLanguage
 {
 
     /**
-     * @var iSource
+     * @var iLanguageRepository
      */
-    protected $source;
+    protected $repository;
 
     /**
      * @var string
@@ -39,29 +39,36 @@ class Language implements iLanguage
 
 
     /**
-     * Language constructor.
+     * Language constructor
+     *
      * @param string $urlCode
      * @param string $countryCode
      * @param string $name
      * @param null | string $calender
-     * @param iSource $source
+     * @param iLanguageRepository|null $repository
      */
-    public function __construct($urlCode, $countryCode, $name, $calender = null, $source = null)
+    public function __construct(
+        $urlCode,
+        $countryCode,
+        $name,
+        $calender = null,
+        iLanguageRepository $repository = null
+    )
     {
-        $this->urlCode = $urlCode;
-        $this->countryCode = $countryCode;
-        $this->name = $name;
-        $this->source = $source;
-        $this->calender = $calender;
+        $this->urlCode      = $urlCode;
+        $this->countryCode  = $countryCode;
+        $this->name         = $name;
+        $this->repository   = $repository;
+        $this->calender     = $calender;
     }
 
     /**
-     * @param iSource $source
+     * @param iLanguageRepository $repository
      * @return $this
      */
-    function setSource(iSource $source)
+    function setRepository(iLanguageRepository $repository)
     {
-        $this->source = $source;
+        $this->repository = $repository;
 
         return $this;
     }
@@ -93,11 +100,11 @@ class Language implements iLanguage
     }
 
     /**
-     * @return iSource
+     * @return iLanguageRepository
      */
-    function getSource()
+    function getRepository()
     {
-        return $this->source;
+        return $this->repository;
     }
 
     /**

@@ -28,16 +28,16 @@ interface iLanguage
 
 
     /**
-     * @return iSource
+     * @return iLanguageRepository
      */
-    function getSource();
+    function getRepository();
 
 
     /**
-     * @param iSource $source
+     * @param iLanguageRepository $source
      * @return $this
      */
-    function setSource(iSource $source);
+    function setRepository(iLanguageRepository $source);
 
 
     /**

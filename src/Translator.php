@@ -1,9 +1,9 @@
 <?php
 namespace mhndev\localization;
 
+use mhndev\localization\exceptions\ParameterNotFoundException;
 use mhndev\localization\filters\FilterFactory;
 use mhndev\localization\interfaces\iLanguage;
-use mhndev\localization\interfaces\iSource;
 use mhndev\localization\interfaces\iTranslator;
 
 /**
@@ -14,24 +14,16 @@ class Translator implements iTranslator
 {
 
     /**
-     * @var iSource
+     * @var array
      */
-    protected $source;
-
-    /**
-     * @var array of iLanguage
-     */
-    protected $languages;
+    protected $languages = [];
 
 
     /**
-     * TranslatorPhpArray constructor.
-     * @param array $languages
+     * @var iLanguage
      */
-    public function __construct($languages = [])
-    {
-        $this->languages = $languages;
-    }
+    protected $fallbackLanguage = null;
+
 
     /**
      * @param $string
@@ -39,15 +31,60 @@ class Translator implements iTranslator
      * @param array $params
      * @return string
      */
-    function translate($string, $to = null, array $params = [])
+    function translate($string, iLanguage $to = null, array $params = [])
     {
         if(is_null($to)){
             $to = $this->getFallbackLanguage();
         }
 
-        return $this->getLanguage($to)->getSource()->get($string, $params);
+        $language = $this->getLanguage($to->getName());
+
+        $stringToBeTranslated = $language->getRepository()->get($string, $to, $params);
+
+        return $this->translateString($stringToBeTranslated, $params);
     }
 
+    /**
+     * @param $string
+     * @param array $parameters
+     * @param bool $throwExceptionOnParamNotFound
+     * @return string
+     */
+    public function translateString(
+        $string,
+        array $parameters = [],
+        $throwExceptionOnParamNotFound = false
+    )
+    {
+        $pattern = '/{{(.*?)}}/';
+
+        $callbackFunction = function ($matches) use ($parameters, $throwExceptionOnParamNotFound) {
+
+            $str = $matches[1];
+
+            if(empty($parameters[$str])){
+
+                if($throwExceptionOnParamNotFound){
+                    throw new ParameterNotFoundException(
+                        sprintf(
+                            'parameter %s not found in %s,',
+                            $str,
+                            json_encode($parameters)
+                        )
+                    );
+                }else{
+                    return $str;
+                }
+
+            }else{
+                return $parameters[$str];
+            }
+        };
+
+        $result = preg_replace_callback($pattern, $callbackFunction, $string);
+
+        return $result;
+    }
 
     /**
      * @param string $text
@@ -55,7 +92,7 @@ class Translator implements iTranslator
      * @param array $params
      * @return string
      */
-    function localizeText($text, iLanguage $to = null, array $params)
+    function localizeText($text, iLanguage $to = null, array $params = [])
     {
         if(is_null($to)){
             $to = $this->getFallbackLanguage();
@@ -123,6 +160,7 @@ class Translator implements iTranslator
     {
         /** @var iLanguage $language */
         foreach ($this->languages as $language){
+
             if($language->getName() == $lang || $language->getUrlCode() == $lang){
                 return $language;
             }
@@ -137,7 +175,23 @@ class Translator implements iTranslator
      */
     function getFallbackLanguage()
     {
-        return LanguageFactory::fromUrlCode('en');
+        if(empty($this->fallbackLanguage) ){
+            $this->fallbackLanguage = LanguageFactory::fromUrlCode('en');
+        }
+
+        return $this->fallbackLanguage;
+    }
+
+
+    /**
+     * @param iLanguage $language
+     * @return $this
+     */
+    function setFallbackLanguage(iLanguage $language)
+    {
+        $this->fallbackLanguage = $language;
+
+        return $this;
     }
 
 

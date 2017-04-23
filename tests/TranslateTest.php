@@ -3,7 +3,7 @@ namespace mhndev\localization\Tests;
 
 use mhndev\localization\interfaces\iLanguage;
 use mhndev\localization\LanguageFactory;
-use mhndev\localization\SourcePhpArray;
+use mhndev\localization\repositories\PhpArray;
 use mhndev\localization\Translator;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
@@ -39,19 +39,17 @@ class TranslateTest extends TestCase
             '<?php return  ' . var_export($translationArray, true) . ';'
         );
 
-        $source = new SourcePhpArray($path);
-        $lang_en = LanguageFactory::fromUrlCode('en')->setSource($source);
+        $repository = new PhpArray($path);
+        $lang_en = LanguageFactory::fromUrlCode('en')->setRepository($repository);
 
         $translator = new Translator();
         $translator->addLanguage($lang_en);
 
         $result = $translator->translate(
             'greet',
-            'en',
+            LanguageFactory::fromUrlCode('en'),
             ['name' => 'majid', 'age' => 20]
         );
-
-
 
         $this->assertEquals('hello this is majid and I am 20 years old.', $result);
     }
