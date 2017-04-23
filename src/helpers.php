@@ -1,23 +1,15 @@
 <?php
+use mhndev\localization\interfaces\iLanguage;
 
 /**
  * @param $string
+ * @param iLanguage | null $to
  * @param array $parameters
  * @return string
  */
-function _t($string, array $parameters = [])
+function _t($string, iLanguage $to = null, array $parameters = [])
 {
-    $pattern = '/{{(.*?)}}/';
-
-    $callbackFunction = function ($matches) use ($parameters) {
-
-        $str = $matches[1];
-        return $parameters[$str];
-    };
-
-    $result = preg_replace_callback($pattern, $callbackFunction, $string);
-
-    return $result;
+    (new \mhndev\localization\Translator())->translate($string, $to, $parameters);
 }
 
 

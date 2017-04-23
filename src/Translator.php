@@ -35,7 +35,7 @@ class Translator implements iTranslator
 
     /**
      * @param $string
-     * @param null $to
+     * @param null | iLanguage $to
      * @param array $params
      * @return string
      */
@@ -51,37 +51,48 @@ class Translator implements iTranslator
 
     /**
      * @param string $text
-     * @param null $to
+     * @param null | iLanguage $to
+     * @param array $params
      * @return string
      */
-    function localizeText($text, $to = null)
+    function localizeText($text, iLanguage $to = null, array $params)
     {
+        if(is_null($to)){
+            $to = $this->getFallbackLanguage();
+        }
         $pattern = '/{{(.*?)}}/';
 
-        $callback = function ($matches) use ($to) {
-
+        $callback = function ($matches) use ($to, $params) {
             $str = $matches[1];
-
-            if(! strpos($str, '|')){
-                $result = $this->translate($str, $to);
+            if(! strpos($str, '|') ) {
+                $result = $this->translate($str, $to, $params);
+            } else{
+                $result = $this->applyFilter($str, $to);
             }
-
-            else{
-                $items = explode('|', $str);
-                $str = $items[0];
-                $filterName = trim($items[1]);
-
-                $result = FilterFactory::newInstance($filterName)->translate(
-                        $str,
-                        ['language'=>LanguageFactory::fromUrlCode($to) ]
-                );
-
-            }
-
             return $result;
         };
 
         return preg_replace_callback($pattern, $callback, $text);
+    }
+
+
+    /**
+     * @param $str
+     * @param iLanguage $to
+     * @return string
+     */
+    public function applyFilter($str, iLanguage $to)
+    {
+        $items = explode('|', $str);
+        $str = $items[0];
+        $filterName = trim($items[1]);
+
+        $options = [ 'language' => $to ];
+        $filter = FilterFactory::newInstance($filterName);
+
+        $result = $filter->translate($str, $options);
+
+        return $result;
     }
 
 
@@ -105,8 +116,8 @@ class Translator implements iTranslator
 
 
     /**
-     * @param $lang
-     * @return iLanguage|null
+     * @param string $lang
+     * @return iLanguage
      */
     public function getLanguage($lang)
     {
