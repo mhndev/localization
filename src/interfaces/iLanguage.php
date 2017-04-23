@@ -15,13 +15,13 @@ interface iLanguage
     function getUrlCode();
 
     /**
-     * for example IR | US | FR
+     * e.g. IR | US | FR
      * @return string
      */
     function getCountryCode();
 
     /**
-     * for example persian | english | dutch
+     * e.g. persian | english | dutch
      * @return string
      */
     function getName();
@@ -41,13 +41,15 @@ interface iLanguage
 
 
     /**
+     * e.g. fa_IR | en_US
      * @return string
      */
     function getLocale();
 
 
     /**
-     * @return mixed
+     * e.g. persian | gregorian
+     * @return string
      */
     function getCalendar();
 }
