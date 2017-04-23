@@ -10,9 +10,10 @@
 #### sample code
 
 ```php
+
 use mhndev\localization\LanguageFactory;
 use mhndev\localization\LanguageLoader;
-use mhndev\localization\SourcePhpArray;
+use mhndev\localization\repositories\PhpArray;
 use mhndev\localization\Translator;
 
 ini_set('display_errors', 1);
@@ -22,25 +23,33 @@ error_reporting(E_ALL);
 
 include_once 'vendor/autoload.php';
 
-$source = new SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'en.php');
-$lang_en = LanguageFactory::fromCountryCode('us')->setSource($source);
-$source = new SourcePhpArray(getcwd().DIRECTORY_SEPARATOR.'fa.php');
-$lang_fa = LanguageFactory::fromUrlCode('fa')->setSource($source);
+$repository = new PhpArray(getcwd().DIRECTORY_SEPARATOR.'en.php');
+$lang_en = LanguageFactory::fromCountryCode('us')->setRepository($repository);
+
+$repository = new PhpArray(getcwd().DIRECTORY_SEPARATOR.'fa.php');
+$lang_fa = LanguageFactory::fromUrlCode('fa')->setRepository($repository);
 
 $translator = new Translator();
 
 $translator->addLanguage($lang_en);
 $translator->addLanguage($lang_fa);
 
-
-
-$result = $translator->translate('greet', 'fa',
-[
+$params = [
     'name' => 'مجید',
     'job' => 'برنامه نویس',
-    'company' => 'دیجی پیک
-    ']
+    'company' => 'دیجی پیک'
+];
+
+
+$result = $translator->translate(
+    'greet',
+    LanguageFactory::fromUrlCode('fa'),
+    $params
 );
+
+var_dump($result);
+
+
 
 /*
  * output would be :
@@ -69,7 +78,7 @@ $string = 'today is {{'.$now.'|date }} and yesterday was :{{'.$yesterday.'| date
  */
 
 
-$translation = $translator->localizeText($string, 'fa');
+$translation = $translator->localizeText($string, LanguageFactory::fromUrlCode('fa'));
 
 echo '<br>';
 
@@ -93,5 +102,6 @@ $result = $languageDetector->detect($request);
 
 var_dump($result);
 die();
+
 
 ```
