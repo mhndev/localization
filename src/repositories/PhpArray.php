@@ -46,16 +46,24 @@ class PhpArray implements iLanguageRepository
      * @param $key
      * @param iLanguage $to
      * @param array $params
+     * @param bool $throwException
      * @return string
      */
-    function get($key, iLanguage $to, array $params = [])
+    function get($key, iLanguage $to, array $params = [], $throwException = false)
     {
         if(!array_key_exists($key, $this->values)){
-            throw new TranslationNotFoundException(sprintf(
-                'translation for %s not found in path : %s',
-                $key,
-                $this->path
-            ));
+
+            if($throwException){
+                throw new TranslationNotFoundException(sprintf(
+                    'translation for %s not found in path : %s',
+                    $key,
+                    $this->path
+                ));
+
+            }else{
+                return $key;
+            }
+
         }
 
         return $this->values[$key];

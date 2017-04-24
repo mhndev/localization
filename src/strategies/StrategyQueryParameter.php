@@ -23,7 +23,7 @@ class StrategyQueryParameter implements iStrategy
 
         parse_str($queryString, $queryParams);
 
-        if (!empty($lng = $queryParams['lang'])){
+        if (array_key_exists('lang', $queryParams) && !empty($lng = $queryParams['lang'])){
             return LanguageFactory::fromUrlCode($lng);
         }
 

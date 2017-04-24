@@ -59,9 +59,9 @@ class Translator implements iTranslator
             ));
         }
 
-        $stringToBeTranslated = $repository->get($string, $to, $params);
+        $stringToBeTranslated = $repository->get($string, $to, $params, $throwException = false);
 
-        return $this->translateString($stringToBeTranslated, $params);
+        return $this->translateString($stringToBeTranslated, $params, $throwException);
     }
 
     /**
