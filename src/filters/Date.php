@@ -4,6 +4,7 @@ namespace mhndev\localization\filters;
 use mhndev\localization\interfaces\iFilter;
 use mhndev\localization\LanguageFactory;
 use mhndev\localization\libs\IntlDateTime;
+use mhndev\phpStd\DateUtil;
 
 /**
  * Class Date
@@ -47,7 +48,7 @@ class Date implements iFilter
         }
 
         $date = new IntlDateTime(
-            $string,
+            DateUtil::toDateTime($string),
             $options['timezone'],
             $options['language']->getCalendar(),
             $options['language']->getLocale()
