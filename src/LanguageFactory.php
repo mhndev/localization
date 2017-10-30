@@ -28,7 +28,6 @@ class LanguageFactory
     private static function from($key, $value)
     {
         foreach (self::languages() as $language) {
-
             if($language[$key] == $value){
                 return new Language(
                     $language['code'],
@@ -59,6 +58,7 @@ class LanguageFactory
      */
     public static function fromUrlCode($urlCode)
     {
+
         return self::from('code', $urlCode);
     }
 

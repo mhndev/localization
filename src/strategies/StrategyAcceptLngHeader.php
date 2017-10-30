@@ -22,6 +22,7 @@ class StrategyAcceptLngHeader implements iStrategy
     function detect(RequestInterface $request)
     {
         if ($request->hasHeader('Accept-Language')){
+
             $language = $request->getHeaderLine('Accept-Language');
 
             if (!extension_loaded('intl')) {

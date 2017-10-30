@@ -60,11 +60,13 @@ class LanguageDetector
      */
     public function detect(RequestInterface $request, iLanguage $defaultLanguage = null)
     {
+
         /** @var iStrategy $strategy */
         foreach ($this->strategies as $strategy){
+
             $language = $strategy->detect($request);
 
-            if(! is_null($language)){
+            if(!is_null($language)){
                 return $language;
             }
 

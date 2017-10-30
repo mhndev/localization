@@ -23,10 +23,10 @@ class StrategyUriChunk implements iStrategy
 
         $pathChunk = explode("/",$virtualPath);
 
-        $language = LanguageFactory::fromUrlCode($pathChunk[1]);
+        $language = LanguageFactory::fromUrlCode($pathChunk[0]);
 
-        if( count($pathChunk) > 1 && $language != null ) {
-            $lang = $pathChunk[1];
+        if( count($pathChunk) > 0 && $language != null ) {
+            $lang = $pathChunk[0];
 
             return LanguageFactory::fromUrlCode($lang);
         }
